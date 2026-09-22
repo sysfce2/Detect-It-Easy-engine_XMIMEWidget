@@ -92,7 +92,7 @@ void XMIMEWidget::on_checkBoxAll_toggled(bool bChecked)
 
 void XMIMEWidget::onDeviceDestroyed()
 {
-    m_pDevice.clear();
+    m_pDevice = nullptr;
     m_deviceDestroyedConnection = QMetaObject::Connection();
     invalidateData(tr("The source device is no longer available."));
 }
@@ -107,12 +107,12 @@ bool XMIMEWidget::detectTypes()
     setDataControlsEnabled(false);
     setStatus(tr("Detecting MIME types..."));
 
-    QPointer<QIODevice> pDevice = m_pDevice;
+    QIODevice *pDevice = m_pDevice;
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    const QStringList listTypes = XMIME::getTypes(pDevice.data(), true);
+    const QStringList listTypes = XMIME::getTypes(pDevice, true);
     QApplication::restoreOverrideCursor();
 
-    if (!pDevice || (pDevice.data() != m_pDevice.data()) || !isDeviceReady()) {
+    if (!pDevice || (pDevice != m_pDevice) || !isDeviceReady()) {
         invalidateData(tr("The source device is no longer available."));
         return false;
     }
@@ -131,7 +131,7 @@ bool XMIMEWidget::detectTypes()
 
 bool XMIMEWidget::isDeviceReady() const
 {
-    QIODevice *pDevice = m_pDevice.data();
+    QIODevice *pDevice = m_pDevice;
 
     return pDevice && pDevice->isOpen() && pDevice->isReadable() && !pDevice->isSequential() && (pDevice->pos() >= 0);
 }

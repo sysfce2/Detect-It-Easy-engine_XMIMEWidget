@@ -21,7 +21,6 @@
 #ifndef XMIMEWIDGET_H
 #define XMIMEWIDGET_H
 
-#include <QPointer>
 #include <QStringList>
 
 #include "xshortcutswidget.h"
@@ -59,7 +58,7 @@ private:
 
 private:
     Ui::XMIMEWidget *ui;
-    QPointer<QIODevice> m_pDevice;
+    QIODevice *m_pDevice;
     QMetaObject::Connection m_deviceDestroyedConnection;
     QStringList m_listTypes;
 };
